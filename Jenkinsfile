@@ -13,7 +13,7 @@ pipeline{
                     sh 'terraform --version'
                     sh '''
                         terraform init
-                        terraform plan
+                        terraform plan -no-color
                     '''
                 } 
 
