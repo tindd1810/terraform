@@ -5,8 +5,14 @@ pipeline{
     tools {
         terraform "my-terraform"
     }
+    parameters {
+        choice choices: ['Apply', 'Delete'], name: 'ApplyOrDelete'
+    }
     stages{
-        stage("Terraform checking"){
+        stage("Apply"){
+            when {
+            expression { params.ApplyOrDelete == 'Apply'}
+            }
             steps{
                 echo "========Start checking terraform========"             
                 withCredentials([aws(credentialsId: 'aws-credentials')]) { 
@@ -17,6 +23,24 @@ pipeline{
                     '''
                     input(message: 'Apply now?', ok: 'Yes')
                     sh 'terraform apply -no-color -auto-approve'
+                } 
+
+            }
+        }
+        stage("Delete"){
+            when {
+            expression { params.ApplyOrDelete == 'Delete'}
+            }
+            steps{
+                echo "========Start checking terraform========"             
+                withCredentials([aws(credentialsId: 'aws-credentials')]) { 
+                    sh '''
+                        terraform init
+                        terraform get -update
+                        terraform plan -no-color
+                    '''
+                    input(message: 'Destroy now?', ok: 'Yes')
+                    sh 'terraform destroy -no-color -auto-approve'
                 } 
 
             }
