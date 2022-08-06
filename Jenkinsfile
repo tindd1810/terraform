@@ -15,6 +15,8 @@ pipeline{
                         terraform init
                         terraform plan -no-color
                     '''
+                    input(message: 'Apply now?', ok: 'Yes')
+                    sh 'terraform apply -no-color -auto-approve'
                 } 
 
             }
