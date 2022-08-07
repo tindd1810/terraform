@@ -20,6 +20,7 @@ pipeline{
                     sh 'terraform --version'
                     sh '''
                         terraform init
+                        terraform get -update
                         terraform plan -no-color
                     '''
                     input(message: 'Apply now?', ok: 'Yes')
