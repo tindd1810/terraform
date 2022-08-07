@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "tindd-terraform-state-pro"
+    bucket = "tindd-terraform-state-prod"
     key = "services/terraform.tfstate"
     region = "ap-southeast-1"
   }
