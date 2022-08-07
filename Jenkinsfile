@@ -40,7 +40,6 @@ pipeline{
                 dir("services") {              
                     withCredentials([aws(credentialsId: 'aws-credentials')]) { 
                     sh '''
-                        terraform init
                         terraform get -update
                         terraform plan -no-color
                     '''
