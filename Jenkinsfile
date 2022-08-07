@@ -1,6 +1,6 @@
 pipeline{
     agent {
-        label 'slave02-aws'
+        label 'slave01'
     }
     tools {
         terraform "my-terraform"
