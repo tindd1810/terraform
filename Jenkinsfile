@@ -14,8 +14,9 @@ pipeline{
             expression { params.ApplyOrDelete == 'Apply'}
             }
             steps{
-                echo "========Start checking terraform========"             
-                withCredentials([aws(credentialsId: 'aws-credentials')]) { 
+                echo "========Start checking terraform========"
+                dir("services") {             
+                    withCredentials([aws(credentialsId: 'aws-credentials')]) { 
                     sh 'terraform --version'
                     sh '''
                         terraform init
@@ -23,7 +24,8 @@ pipeline{
                     '''
                     input(message: 'Apply now?', ok: 'Yes')
                     sh 'terraform apply -no-color -auto-approve'
-                } 
+                    } 
+                }
 
             }
         }
@@ -32,8 +34,9 @@ pipeline{
             expression { params.ApplyOrDelete == 'Delete'}
             }
             steps{
-                echo "========Start checking terraform========"             
-                withCredentials([aws(credentialsId: 'aws-credentials')]) { 
+                echo "========Start checking terraform========"
+                dir("services") {              
+                    withCredentials([aws(credentialsId: 'aws-credentials')]) { 
                     sh '''
                         terraform init
                         terraform get -update
@@ -41,6 +44,7 @@ pipeline{
                     '''
                     input(message: 'Destroy now?', ok: 'Yes')
                     sh 'terraform destroy -no-color -auto-approve'
+                    }
                 } 
 
             }
